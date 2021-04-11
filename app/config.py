@@ -1,5 +1,8 @@
 import os
 
+app.config["UPLOADS"] = "./uploads"
+ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg']
+
 class Config(object):
     """Base Config Object"""
     DEBUG = False
