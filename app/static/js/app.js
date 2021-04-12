@@ -8,6 +8,7 @@ const app = Vue.createApp({
     }
 });
 
+
 app.component('app-header', {
     name: 'AppHeader',
     template: `
@@ -57,6 +58,45 @@ const Home = {
     }
 };
 
+const UploadForm = {
+    name: 'UploadForm',
+    template:`
+    <h2>Upload Form</h2>
+    <form @submit.prevent="uploadPhoto" method='POST' enctype='multipart/form-data'>
+        <div class="form-row">
+            <div class="col">
+                <label for="description" class="form-label">Description</label><br>
+                <textarea class="w-100" name="description" id="description"></textarea>
+            </div>
+        </div>
+        <div class="form-row mt-5 mb-5">
+            <div class="col">
+                <label for="photo">Photo Upload</label><br>
+                <input type="file" name="photo" id="photo">
+            </div>
+        </div>
+        <button type="submit" name="submit" class="btn btn-primary mb-3">Submit</button>
+    </form>
+    `,
+    methods:{
+        uploadPhoto: function(){
+            fetch("/api/upload", {
+                method: 'POST'
+               })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (jsonResponse) {
+                // display a success message
+                    console.log(jsonResponse);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+};
+
 const NotFound = {
     name: 'NotFound',
     template: `
@@ -71,7 +111,7 @@ const NotFound = {
 
 // Define Routes
 const routes = [
-    { path: "/", component: Home },
+    { path: "/", component: UploadForm },
     // Put other routes here
 
     // This is a catch all route in case none of the above matches
