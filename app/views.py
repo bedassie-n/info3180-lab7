@@ -32,20 +32,22 @@ def index(path):
 
 @app.route('/api/upload', methods=['POST'])
 def upload():
-    desc = request.form['description']
-    file = request.files['photo']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        try:
-            file.save(os.path.join(app.config['UPLOADS'], filename))
-            message = jsonify(message={
-                "message": "File Upload Successful",
-                "filename": file.filename,
-                "description": "Some description for your image"
-            })
-            return render_template("index.html", message=message)
-        except:
-            flash("Could not upload file.","danger")
+    form = UploadForm()
+    if form.validate_on_submit():
+        desc = form.description
+        file = request.files['photo']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            try:
+                file.save(os.path.join(app.config['UPLOADS'], filename))
+                message = jsonify(message={
+                    "message": "File Upload Successful",
+                    "filename": file.filename,
+                    "description": "Some description for your image"
+                })
+                return render_template("index.html", message=message)
+            except:
+                flash("Could not upload file.","danger")
     return render_template("index.html", message=jsonify(form_errors(form)) )
 
 
